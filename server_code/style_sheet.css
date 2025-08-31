@@ -1,0 +1,42 @@
+.canvasHolder{
+    position: relative;
+    height: 800px; width: 800px;
+}
+.canvas {
+    border: 1px solid black;
+    border-width: 1px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0px; left: 0px;
+}
+.container {
+    display: flex;
+}
+.right_half {
+    padding: 1em;
+}
+button {
+    margin: 2px;
+    display: "inherit";
+}
+input {
+    margin: 2px;
+}
+body {
+    /*background-image: url("garbleinfo.jpg");*/
+    font-family: 'OpenSans', Arial, Helvetica, sans-serif;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal;
+}
+.arial {
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.0em;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+/*
+@font-face {
+  font-family: OpenSans;
+  src: url('OpenSans-Regular.woff') format('woff');
+}
+*/

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, inital-scale=1, user-scalable=no"/>
+        <link rel="stylesheet" href="style_sheet.css">
+    </head>
+    <body>
+        <script src="app_code.js"></script>
+        <script>
+            window.onload = gameStart;
+        </script>
+
+        <div id="top">
+            RaceID (YYMMDD-HHMM):<input id="race" size="15">
+            <button onclick="enterRace()">ENTER</button>
+            Number Marks:<input id="number_marks" size="2" onchange="redrawButtons()">
+        </div>
+
+        <div id="message"></div>
+
+        <div id="middle" class="container">
+            <div class="canvasHolder">
+                <canvas class="canvas" id="sketch" width="800" height="800"></canvas>
+            </div>
+            <div id="right">
+                <div id="marks" class="right_half"></div>
+                <div id="results" class="right_half"></div>
+            </div>
+        </div>
+
+        <button onclick="window.open('index.html', '_self')">HOME PAGE</button>
+    </body>
+</html>
