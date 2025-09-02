@@ -10,7 +10,7 @@ const YSCALE = CANVAS_H / (YMAX - YMIN);
 const XMAX = -1.82900;
 const XMIN = -1.83100;
 const CANVAS_W = 800;
-const XSCALE = YSCALE / Math.cos(53.867 * Math.PI / 180.0);
+const XSCALE = YSCALE * Math.cos(53.867 * Math.PI / 180.0);
 const LEG_DONE = 0.90;
 
 
@@ -166,11 +166,12 @@ function redraw() {
     results_html = "";
     const dist_times = calcDistances();
     Object.keys(dist_times).forEach(key => {
-        const std_tm = 100.0 / dist_times[key].speed;
+        const std_tm = (dist_times[key].speed != 0) ? 100.0 / dist_times[key].speed : 0.0;
         const std_h = Math.floor(std_tm);
         const std_m = Math.floor((std_tm - std_h) * 60.0);
         const std_s = Math.floor((std_tm - std_h - std_m / 60.0) * 3600.0);
-        results_html += `${key} => distance:${dist_times[key].distance.toFixed(1)}, speed:${dist_times[key].speed.toFixed(1)}, std_tm:${std_h}:${std_m}:${std_s}<br />`
+
+        results_html += `${key} => legs:${dist_times[key].legs},  distance:${dist_times[key].distance.toFixed(1)},  speed:${dist_times[key].speed.toFixed(1)},  std_tm:${std_h}:${std_m}:${std_s}<br />`
     });
     results.innerHTML = results_html;
 }
@@ -265,7 +266,8 @@ function calcDistances() {
     Object.keys(locations).forEach(key => {
         let mk_fr = 0;
         let mk_to = 1;
-        let completed_legs = 0;
+        let completed_dist = 0;
+        let completed_num = 0;
         let incomplete_leg = 0;
         let this_leg = new Leg(mark_locs[mk_fr][2], mark_locs[mk_fr][1], mark_locs[mk_to][2], mark_locs[mk_to][1]);
         Object.values(locations[key]).forEach(val => {
@@ -273,7 +275,8 @@ function calcDistances() {
             if (incomplete_leg > LEG_DONE) {
                 // at mark! TODO actual threshold. Also, should next Leg be near to unstarted?
                 // should there be additional Math.hypot(val[2] - this_leg.x_end, val[1] - this_leg.y_end) < ROUNDING_DIST?
-                completed_legs += this_leg.size;
+                completed_dist += this_leg.size;
+                completed_num += 1;
                 incomplete_leg = 0;
                 mk_fr = mk_to;
                 mk_to += 1;
@@ -284,7 +287,7 @@ function calcDistances() {
             }
         });
         const tm = locations[key].slice(-1)[0][0] - locations[key][0][0]; // last location time - first location time.
-        distances[key] = {"distance": (completed_legs + incomplete_leg), "speed": (completed_legs + incomplete_leg) * 60.0 / tm};
+        distances[key] = {"distance": (completed_dist + incomplete_leg), "speed": (completed_dist + incomplete_leg) * 60.0 / tm, "legs": completed_num};
     });
     return distances;
 }

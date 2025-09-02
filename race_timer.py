@@ -14,9 +14,9 @@ from race_sequence import race_sequence
 
 LATLON_DELAY = 5 # do we need this? Can let it run flat out as serial read blocking
 CLOCKSET_DELAY = 3600 # every hour
-SAVE_DELAY = 15 # four times per minute -> 240 positions per race
+SAVE_DELAY = 10 # six times per minute -> 300 positions per race
 #VOL_CONTROL = "'Aeropex by AfterShokz - A2DP Playback Volum'"
-VOL_CONTROL = "'Bluetooth music - A2DP'"
+#VOL_CONTROL = "'Bluetooth music - A2DP'"
 VOL_CONTROL = "'G01 - A2DP'"
 DEBUG = True
 
@@ -27,12 +27,12 @@ class RaceTimer:
         self.tm = datetime.now()
         self.id = self.get_mac_address().replace(":", "")[-4:] # this is just last 4 of 12 alphanumeric char
         self.last_clockset = 0.0
-        self.lat = 53.8673147
+        self.lat = 53.8673147 #default value at club house
         self.lon = -1.6768643
         self.race_data = {"uid": self.id, "race": 000000-0000, "locations":[]}
         self.next_race = None
         self.headphones_connected = False
-        self.connect_headphones() # this only works if switched on but saves delay playing first msg
+        self.connect_headphones() # this only works if headphones switched on first but saves delay playing first msg
         self.volume_set = False
         self.last_updated_race_times = None # just in case left on over night
 
@@ -196,7 +196,7 @@ class RaceTimer:
         amixer -D bluealsa
         the string will have something relating to volume NB single quotes as part of string
         """
-        subprocess.run(["amixer", "-D", "bluealsa", "--", "sset", VOL_CONTROL, f"{volume}%"])
+        subprocess.run(["amixer", "-D", "bluealsa", "--", "sset", VOL_CONTROL, f"{volume}%"]) # TODO check if successful?
 
     def get_mac_address(self):
         # use this as ID for this RPi
